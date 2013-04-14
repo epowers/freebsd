@@ -3535,7 +3535,7 @@ nfsrv_fsinfo(struct nfsrv_descript *nfsd, struct nfssvc_sock *slp,
 	struct ucred *cred = nfsd->nd_cr;
 	struct nfsv3_fsinfo *sip;
 	caddr_t bpos;
-	int error = 0, rdonly, getret = 1, pref;
+	int error = 0, rdonly, getret = 1, pref, result;
 	struct mbuf *mb, *mreq;
 	struct vnode *vp = NULL;
 	struct vattr at;
@@ -3559,7 +3559,7 @@ nfsrv_fsinfo(struct nfsrv_descript *nfsd, struct nfssvc_sock *slp,
 	}
 
 	/* XXX Try to make a guess on the max file size. */
-	VFS_STATFS(vp->v_mount, &sb);
+	result = VFS_STATFS(vp->v_mount, &sb);
 	maxfsize = (u_quad_t)0x80000000 * sb.f_bsize - 1;
 
 	getret = VOP_GETATTR(vp, &at, cred);

@@ -3392,10 +3392,11 @@ softdep_process_journal(mp, needwk, flags)
 	 * unsuspend it if we already have.
 	 */
 	if (flags == 0 && jblocks->jb_suspended) {
+		int result;
 		if (journal_unsuspend(ump))
 			return;
 		FREE_LOCK(&lk);
-		VFS_SYNC(mp, MNT_NOWAIT);
+		result = VFS_SYNC(mp, MNT_NOWAIT);
 		ffs_sbupdate(ump, MNT_WAIT, 0);
 		ACQUIRE_LOCK(&lk);
 	}

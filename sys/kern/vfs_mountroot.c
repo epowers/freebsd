@@ -248,7 +248,7 @@ vfs_mountroot_shuffle(struct thread *td, struct mount *mpdevfs)
 	struct mount *mporoot, *mpnroot;
 	struct vnode *vp, *vporoot, *vpdevfs;
 	char *fspath;
-	int error;
+	int error, result;
 
 	mpnroot = TAILQ_NEXT(mpdevfs, mnt_list);
 
@@ -267,7 +267,7 @@ vfs_mountroot_shuffle(struct thread *td, struct mount *mpdevfs)
 	if (mporoot != mpdevfs)
 		cache_purgevfs(mpdevfs);
 
-	VFS_ROOT(mporoot, LK_EXCLUSIVE, &vporoot);
+	result = VFS_ROOT(mporoot, LK_EXCLUSIVE, &vporoot);
 
 	VI_LOCK(vporoot);
 	vporoot->v_iflag &= ~VI_MOUNT;

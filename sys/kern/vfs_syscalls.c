@@ -139,7 +139,7 @@ sys_sync(td, uap)
 	struct sync_args *uap;
 {
 	struct mount *mp, *nmp;
-	int save;
+	int save, result;
 
 	mtx_lock(&mountlist_mtx);
 	for (mp = TAILQ_FIRST(&mountlist); mp != NULL; mp = nmp) {
@@ -151,7 +151,7 @@ sys_sync(td, uap)
 		    vn_start_write(NULL, &mp, V_NOWAIT) == 0) {
 			save = curthread_pflags_set(TDP_SYNCIO);
 			vfs_msync(mp, MNT_NOWAIT);
-			VFS_SYNC(mp, MNT_NOWAIT);
+			result = VFS_SYNC(mp, MNT_NOWAIT);
 			curthread_pflags_restore(save);
 			vn_finished_write(mp);
 		}
