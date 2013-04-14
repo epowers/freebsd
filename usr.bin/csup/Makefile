@@ -30,11 +30,21 @@ SRCS=	attrstack.c \
 	updater.c
 
 CFLAGS+= -I. -I${.CURDIR}
-CFLAGS+= -DHAVE_FFLAGS -DNDEBUG
 WARNS?=	1
 
+# FreeBSD
+CFLAGS+= -DHAVE_FFLAGS -DNDEBUG
+
+# Linux
+#CFLAGS+= -DNDEBUG
+
+# FreeBSD
 DPADD=	${LIBMD} ${LIBZ} ${LIBPTHREAD}
 LDADD=	-lmd -lz -lpthread
+
+# Linux
+#DPADD=	${LIBSSL} ${LIBZ} ${LIBPTHREAD}
+#LDADD=	-lssl -lz -lpthread
 
 SCRIPTS=	cpasswd.sh
 MAN=		csup.1 cpasswd.1
